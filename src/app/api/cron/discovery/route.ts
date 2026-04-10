@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { runDiscoveryPipeline } from '@/lib/discovery/engine';
 
-export async function POST(request: NextRequest) {
+async function handleCron(request: NextRequest) {
+  // Vercel crons send CRON_SECRET via Authorization header
   const authHeader = request.headers.get('authorization');
   const cronSecret = process.env.CRON_SECRET;
 
@@ -26,4 +27,14 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+// Vercel crons use GET
+export async function GET(request: NextRequest) {
+  return handleCron(request);
+}
+
+// Manual triggers use POST
+export async function POST(request: NextRequest) {
+  return handleCron(request);
 }

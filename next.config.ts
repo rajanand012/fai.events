@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  serverExternalPackages: ['better-sqlite3'],
+  serverExternalPackages: ['@libsql/client'],
 };
 
 export default nextConfig;
