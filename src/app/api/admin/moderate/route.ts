@@ -51,13 +51,13 @@ export async function POST(request: NextRequest) {
           return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
       }
 
-      const result = db
+      const result = await db
         .update(experiences)
         .set(updateData)
         .where(eq(experiences.id, id))
         .run();
 
-      updated += result.changes;
+      updated += result.rowsAffected;
     }
 
     return NextResponse.json({ updated });

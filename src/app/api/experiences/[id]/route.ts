@@ -14,8 +14,8 @@ export async function GET(
   const isNumeric = !isNaN(numericId) && String(numericId) === id;
 
   const result = isNumeric
-    ? db.select().from(experiences).where(eq(experiences.id, numericId)).get()
-    : db.select().from(experiences).where(eq(experiences.slug, id)).get();
+    ? await db.select().from(experiences).where(eq(experiences.id, numericId)).get()
+    : await db.select().from(experiences).where(eq(experiences.slug, id)).get();
 
   if (!result) {
     return NextResponse.json({ error: 'Experience not found' }, { status: 404 });
@@ -72,12 +72,12 @@ export async function PUT(
       updateData.publishedAt = now;
     }
 
-    db.update(experiences)
+    await db.update(experiences)
       .set(updateData)
       .where(eq(experiences.id, numericId))
       .run();
 
-    const updated = db.select().from(experiences).where(eq(experiences.id, numericId)).get();
+    const updated = await db.select().from(experiences).where(eq(experiences.id, numericId)).get();
 
     if (!updated) {
       return NextResponse.json({ error: 'Experience not found' }, { status: 404 });
@@ -108,12 +108,12 @@ export async function DELETE(
     return NextResponse.json({ error: 'Invalid experience ID' }, { status: 400 });
   }
 
-  db.update(experiences)
+  await db.update(experiences)
     .set({ status: 'archived', updatedAt: new Date().toISOString() })
     .where(eq(experiences.id, numericId))
     .run();
 
-  const archived = db.select().from(experiences).where(eq(experiences.id, numericId)).get();
+  const archived = await db.select().from(experiences).where(eq(experiences.id, numericId)).get();
 
   if (!archived) {
     return NextResponse.json({ error: 'Experience not found' }, { status: 404 });

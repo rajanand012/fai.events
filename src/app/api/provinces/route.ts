@@ -5,7 +5,7 @@ import { asc } from 'drizzle-orm';
 import type { Province } from '@/lib/db/schema';
 
 export async function GET() {
-  const results = db
+  const results = await db
     .select()
     .from(provinces)
     .orderBy(asc(provinces.name))

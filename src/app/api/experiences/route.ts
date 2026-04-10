@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
   const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
   // Get total count
-  const [totalResult] = db
+  const [totalResult] = await db
     .select({ value: count() })
     .from(experiences)
     .where(whereClause)
@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
       break;
   }
 
-  const results = db
+  const results = await db
     .select()
     .from(experiences)
     .where(whereClause)
@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
 
     const slug = await generateUniqueSlug(body.title);
 
-    db.insert(experiences)
+    await db.insert(experiences)
       .values({
         slug,
         title: body.title,
@@ -136,7 +136,7 @@ export async function POST(request: NextRequest) {
       })
       .run();
 
-    const created = db.select().from(experiences).where(eq(experiences.slug, slug)).get();
+    const created = await db.select().from(experiences).where(eq(experiences.slug, slug)).get();
 
     return NextResponse.json({ experience: created }, { status: 201 });
   } catch (error) {

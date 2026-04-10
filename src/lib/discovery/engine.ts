@@ -38,7 +38,7 @@ export async function runDiscoveryPipeline(
   let published = 0;
 
   // 1. Create a pipeline_runs record
-  db.insert(pipelineRuns)
+  await db.insert(pipelineRuns)
     .values({
       startedAt: new Date().toISOString(),
       status: 'running',
@@ -46,7 +46,7 @@ export async function runDiscoveryPipeline(
     })
     .run();
 
-  const latestRun = db.select().from(pipelineRuns).orderBy(desc(pipelineRuns.id)).limit(1).get();
+  const latestRun = await db.select().from(pipelineRuns).orderBy(desc(pipelineRuns.id)).limit(1).get();
   const runId = latestRun!.id;
 
   try {
@@ -72,7 +72,7 @@ export async function runDiscoveryPipeline(
       for (const candidate of candidates) {
         try {
           // Check for duplicates
-          if (isDuplicate(candidate.url, candidate.title)) {
+          if (await isDuplicate(candidate.url, candidate.title)) {
             duplicatesSkipped++;
             continue;
           }
@@ -99,7 +99,7 @@ export async function runDiscoveryPipeline(
             const now = new Date().toISOString();
             const autoApprove = evaluation.scores.overall >= 85;
 
-            db.insert(experiences)
+            await db.insert(experiences)
               .values({
                 slug,
                 title: evaluation.title,
@@ -132,13 +132,13 @@ export async function runDiscoveryPipeline(
               })
               .run();
 
-            const inserted = db.select().from(experiences).where(eq(experiences.slug, slug)).get();
+            const inserted = await db.select().from(experiences).where(eq(experiences.slug, slug)).get();
             // Record URL with experience ID
-            recordUrl(candidate.url, inserted?.id);
+            await recordUrl(candidate.url, inserted?.id);
             published++;
           } else {
             // Record URL to avoid re-processing, but don't publish
-            recordUrl(candidate.url);
+            await recordUrl(candidate.url);
           }
         } catch (error) {
           const msg = `Candidate error (${candidate.url}): ${error}`;
@@ -159,7 +159,7 @@ export async function runDiscoveryPipeline(
   const duration = Date.now() - startTime;
 
   // Update pipeline_runs record with final stats
-  db.update(pipelineRuns)
+  await db.update(pipelineRuns)
     .set({
       completedAt: new Date().toISOString(),
       status: errors.length > 0 && published === 0 ? 'failed' : 'completed',

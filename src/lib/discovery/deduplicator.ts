@@ -97,11 +97,11 @@ const TITLE_SIMILARITY_THRESHOLD = 0.8;
  * 2. If no URL match and a title is provided, check the experiences table
  *    for similar titles using Dice coefficient similarity (threshold: 0.8).
  */
-export function isDuplicate(url: string, title?: string): boolean {
+export async function isDuplicate(url: string, title?: string): Promise<boolean> {
   const normalized = normalizeUrl(url);
 
   // Check seen_urls for exact normalized URL match
-  const urlMatch = db
+  const urlMatch = await db
     .select()
     .from(seenUrls)
     .where(eq(seenUrls.url, normalized))
@@ -111,7 +111,7 @@ export function isDuplicate(url: string, title?: string): boolean {
 
   // If title is provided, check experiences for similar titles
   if (title && title.trim().length > 0) {
-    const allExperiences = db
+    const allExperiences = await db
       .select({ title: experiences.title })
       .from(experiences)
       .all();
@@ -130,11 +130,11 @@ export function isDuplicate(url: string, title?: string): boolean {
  * Record a URL in the seen_urls table to prevent re-processing.
  * If the URL already exists (conflict), the insert is silently skipped.
  */
-export function recordUrl(url: string, experienceId?: number): void {
+export async function recordUrl(url: string, experienceId?: number): Promise<void> {
   const normalized = normalizeUrl(url);
 
   try {
-    db.insert(seenUrls)
+    await db.insert(seenUrls)
       .values({
         url: normalized,
         firstSeenAt: new Date().toISOString(),
