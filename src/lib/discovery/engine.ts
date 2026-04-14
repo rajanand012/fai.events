@@ -109,7 +109,7 @@ export async function runDiscoveryPipeline(
 
             // Use a fallback image if none found from scraping
             const imageUrl = scraped.ogImage ||
-              (scraped.images && scraped.images.length > 0 ? scraped.images[0] : null) ||
+              (scraped.images && scraped.images.length > 0 ? scraped.images[0].src : null) ||
               `https://images.unsplash.com/photo-1528181304800-259b08848526?w=800&auto=format&fit=crop`;
 
             await db.insert(experiences)
@@ -125,6 +125,7 @@ export async function runDiscoveryPipeline(
                 imageUrl,
                 sourceUrl: candidate.url,
                 websiteUrl: evaluation.websiteUrl || null,
+                bookingUrl: evaluation.bookingUrl || evaluation.websiteUrl || null,
                 socialLink: evaluation.socialLink || null,
                 contactLink: evaluation.contactLink || null,
                 priceRange: evaluation.priceRange,

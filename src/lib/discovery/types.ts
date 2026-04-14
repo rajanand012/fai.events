@@ -40,6 +40,7 @@ export interface AiEvaluation {
   duration: string;
   tags: string[];
   websiteUrl: string;
+  bookingUrl: string;
   socialLink: string;
   contactLink: string;
   scores: {

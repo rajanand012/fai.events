@@ -23,6 +23,7 @@ const EVALUATION_TOOL = {
       'duration',
       'tags',
       'websiteUrl',
+      'bookingUrl',
       'socialLink',
       'contactLink',
       'scores',
@@ -95,7 +96,11 @@ const EVALUATION_TOOL = {
       },
       websiteUrl: {
         type: 'string' as const,
-        description: 'Official website URL if found, or empty string.',
+        description: 'Official website URL of the venue, tour operator, or experience provider. Must be a real, working website where users can learn more. Never use Wikipedia or generic info pages.',
+      },
+      bookingUrl: {
+        type: 'string' as const,
+        description: 'Direct booking or ticket purchase URL where users can actually book this experience. Look for links to the official booking page, or booking platforms like Viator, GetYourGuide, Klook, or the venue\'s own reservation page. This is required for publishing.',
       },
       socialLink: {
         type: 'string' as const,
@@ -144,6 +149,8 @@ const SYSTEM_PROMPT = `You are an expert Thailand travel curator for fai.events,
 Be selective: only recommend experiences that are truly extraordinary, culturally rich, luxurious, or memorably unique.
 
 Reject generic tourist activities, low-quality content, spam, outdated listings, and ordinary chain hotel offerings.
+
+IMPORTANT: Every experience MUST have a real bookingUrl where users can actually book, reserve, or purchase tickets. Look for booking links in the page content, or identify the official booking page for the venue/operator. If the page is from a booking platform (Viator, GetYourGuide, Klook, etc.), use that URL as the bookingUrl. If no bookable link can be found, lower the overall score below 70.
 
 Score rigorously:
 - 90+ for truly exceptional experiences
