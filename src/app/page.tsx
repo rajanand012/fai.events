@@ -319,7 +319,7 @@ export default async function HomePage() {
                         <img
                           src={workshop.imageUrl}
                           alt={workshop.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                         />
                       </div>
                     )}

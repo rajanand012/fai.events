@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
-// Load .env.local since we're outside Next.js
+// Load .env.local BEFORE any other imports
 const envPath = resolve(process.cwd(), '.env.local');
 try {
   const envContent = readFileSync(envPath, 'utf-8');
@@ -22,19 +22,21 @@ try {
   console.warn('Warning: Could not read .env.local');
 }
 
-import { db } from '../src/lib/db';
-import { experiences } from '../src/lib/db/schema';
-import { eq, like } from 'drizzle-orm';
-
+// Dynamic import AFTER env is loaded
 async function main() {
+  console.log('DB URL:', process.env.TURSO_DATABASE_URL ? 'TURSO' : 'LOCAL');
+
+  const { db } = await import('../src/lib/db');
+  const { experiences } = await import('../src/lib/db/schema');
+  const { eq, like } = await import('drizzle-orm');
+
   const now = new Date().toISOString();
 
   // ============================================================
   // STEP 1: Add Dan Remon Workshop
   // ============================================================
-  console.log('=== Step 1: Adding Dan Remon Workshop ===');
+  console.log('\n=== Step 1: Adding Dan Remon Workshop ===');
 
-  // Check if already exists
   const existingDan = await db.select().from(experiences).where(like(experiences.title, '%Dan Remon%')).limit(1);
   if (existingDan.length > 0) {
     console.log('Dan Remon workshop already exists, skipping.');
@@ -79,15 +81,22 @@ async function main() {
   console.log(`Found ${allWorkshops.length} workshops`);
 
   for (const workshop of allWorkshops) {
-    if (workshop.destination !== 'Available Across Thailand') {
+    const needsTitleFix = workshop.title.includes('in Bangkok') || workshop.title.includes('in Phuket') || workshop.title.includes('in Chiang Mai');
+    const needsDestFix = workshop.destination !== 'Available Across Thailand';
+
+    if (needsTitleFix || needsDestFix) {
+      const newTitle = workshop.title.replace(/ in Bangkok/g, '').replace(/ in Phuket/g, '').replace(/ in Chiang Mai/g, '');
+      const newSlug = newTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
       await db.update(experiences)
         .set({
+          title: newTitle,
+          slug: newSlug,
           destination: 'Available Across Thailand',
           updatedAt: now,
         })
         .where(eq(experiences.id, workshop.id))
         .run();
-      console.log(`Updated: "${workshop.title}" - destination changed from "${workshop.destination}" to "Available Across Thailand"`);
+      console.log(`Updated: "${workshop.title}" -> "${newTitle}" | destination: Available Across Thailand`);
     } else {
       console.log(`Already set: "${workshop.title}"`);
     }
@@ -292,7 +301,6 @@ async function main() {
   ];
 
   for (const exp of bangkokExperiences) {
-    // Check if slug already exists
     const existing = await db.select().from(experiences).where(eq(experiences.slug, exp.slug)).limit(1);
     if (existing.length > 0) {
       console.log(`Already exists: "${exp.title}", skipping.`);
