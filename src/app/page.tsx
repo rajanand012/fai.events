@@ -69,6 +69,19 @@ export default async function HomePage() {
     .orderBy(desc(experiences.aiScore));
   const workshops = workshopRows.map(mapExperience);
 
+  // Dynamic stats for hero
+  const totalCountResult = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(experiences)
+    .where(eq(experiences.status, "approved"));
+  const totalExperiences = totalCountResult[0]?.count ?? 0;
+
+  const destinationCountResult = await db
+    .select({ count: sql<number>`count(distinct ${experiences.destination})` })
+    .from(experiences)
+    .where(eq(experiences.status, "approved"));
+  const totalDestinations = destinationCountResult[0]?.count ?? 0;
+
   // Latest discoveries
   const latestRows = await db
     .select()
@@ -125,11 +138,11 @@ export default async function HomePage() {
               <div className="mt-12 flex flex-wrap items-center gap-6 text-white/60 text-sm font-medium">
                 <div className="flex items-center gap-2">
                   <span className="h-1.5 w-1.5 rounded-full bg-brand-yellow" />
-                  37+ Curated Experiences
+                  {totalExperiences}+ Curated Experiences
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="h-1.5 w-1.5 rounded-full bg-brand-yellow" />
-                  15+ Destinations
+                  {totalDestinations}+ Destinations
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="h-1.5 w-1.5 rounded-full bg-brand-yellow" />
@@ -315,11 +328,11 @@ export default async function HomePage() {
                     className="group rounded-2xl border border-white/10 overflow-hidden hover:border-brand-yellow/30 transition-all duration-300"
                   >
                     {workshop.imageUrl && (
-                      <div className="aspect-[16/10] overflow-hidden">
+                      <div className="aspect-[4/3] overflow-hidden">
                         <img
                           src={workshop.imageUrl}
                           alt={workshop.title}
-                          className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                          className="w-full h-full object-cover object-[center_20%] group-hover:scale-105 transition-transform duration-500"
                         />
                       </div>
                     )}

@@ -97,7 +97,7 @@ export async function runDiscoveryPipeline(
           if (evaluation.scores.overall >= 70) {
             const slug = await generateUniqueSlug(evaluation.title);
             const now = new Date().toISOString();
-            const autoApprove = evaluation.scores.overall >= 85;
+            const autoApprove = evaluation.scores.overall >= 70;
 
             await db.insert(experiences)
               .values({
