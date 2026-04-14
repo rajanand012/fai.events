@@ -27,72 +27,86 @@ async function main() {
   const now = new Date().toISOString();
 
   // All URLs verified working as of 2026-04-14
-  const fixes: Record<string, { sourceUrl: string; websiteUrl?: string }> = {
+  // Each experience has: websiteUrl (official site), bookingUrl (where to book), sourceUrl (reference)
+  const fixes: Record<string, { sourceUrl: string; websiteUrl: string; bookingUrl: string }> = {
     'bangkok-floating-markets-sunrise-tour': {
-      // bangkok.com redirects to hotels.com (broken)
-      // Wikipedia is reliable and authoritative
-      sourceUrl: 'https://en.wikipedia.org/wiki/Damnoen_Saduak_floating_market',
-      websiteUrl: 'https://en.wikipedia.org/wiki/Damnoen_Saduak_floating_market',
+      // Official floating market tour site with booking integration
+      sourceUrl: 'https://damnoensaduak.com/en/',
+      websiteUrl: 'https://damnoensaduak.com/en/',
+      bookingUrl: 'https://www.viator.com/tours/Bangkok/Floating-Markets-of-Damnoen-Saduak-Cruise-Day-Trip-from-Bangkok/d343-3685BKK21C',
     },
     'bangkok-muay-thai-vip-ringside-experience': {
-      // rajadamnern.com - verified working
+      // Official Rajadamnern Stadium site + ticket page
       sourceUrl: 'https://www.rajadamnern.com/',
       websiteUrl: 'https://www.rajadamnern.com/',
+      bookingUrl: 'https://rajadamnern.com/tickets/',
     },
     'bangkok-jim-thompson-house-private-tour': {
-      // jimthompsonhouse.com has SSL error, .org version works
+      // Official museum site + Viator booking page
       sourceUrl: 'https://www.jimthompsonhouse.org',
       websiteUrl: 'https://www.jimthompsonhouse.org',
+      bookingUrl: 'https://www.viator.com/Bangkok-attractions/Jim-Thompson-House-Museum/d343-a8537',
     },
     'bangkok-chinatown-street-food-after-dark': {
-      // bangkok.com redirects to hotels.com (broken)
-      sourceUrl: 'https://en.wikipedia.org/wiki/Yaowarat_Road',
-      websiteUrl: 'https://en.wikipedia.org/wiki/Yaowarat_Road',
+      // Bangkok Food Tours: actual bookable Yaowarat food tour
+      sourceUrl: 'https://www.bangkokfoodtours.com/chinatown/',
+      websiteUrl: 'https://www.bangkokfoodtours.com/chinatown/',
+      bookingUrl: 'https://www.bangkokfoodtours.com/chinatown/',
     },
     'bangkok-grand-palace-and-emerald-buddha-dawn': {
-      // royalgrandpalace.th - verified working
+      // Official Grand Palace site + ticket purchasing page
       sourceUrl: 'https://www.royalgrandpalace.th/en/home',
       websiteUrl: 'https://www.royalgrandpalace.th/en/home',
+      bookingUrl: 'https://www.royalgrandpalace.th/en/buy-ticket',
     },
     'bangkok-rooftop-cocktails-lebua-sky-bar': {
-      // lebua.com is completely down (ECONNREFUSED)
-      // Wikipedia article about the property includes Sky Bar info
-      sourceUrl: 'https://en.wikipedia.org/wiki/Lebua_at_State_Tower',
-      websiteUrl: 'https://en.wikipedia.org/wiki/Lebua_at_State_Tower',
+      // lebua.com is down, using Rooftop Guide as reference + GetYourGuide booking
+      sourceUrl: 'https://www.therooftopguide.com/rooftop-bars-in-bangkok/sky-bar-lebua-at-state-tower.html',
+      websiteUrl: 'https://www.therooftopguide.com/rooftop-bars-in-bangkok/sky-bar-lebua-at-state-tower.html',
+      bookingUrl: 'https://www.getyourguide.com/bangkok-l169/bangkok-lebua-rooftop-bar-reservation-round-trip-transfer-t300586/',
     },
     'bangkok-traditional-thai-massage-wat-pho': {
-      // watpho.com - verified working
+      // Official Wat Pho site + visit planning page with massage booking info
       sourceUrl: 'https://www.watpho.com/',
       websiteUrl: 'https://www.watpho.com/',
+      bookingUrl: 'https://www.watpho.com/en/contact/plan',
     },
     'bangkok-chao-phraya-dinner-cruise-luxury': {
-      // bangkok.com redirects to hotels.com (broken)
-      // chaophrayacruise.com is an actual cruise operator, verified working
+      // Chao Phraya Cruise: actual cruise operator with online booking
       sourceUrl: 'https://www.chaophrayacruise.com/',
       websiteUrl: 'https://www.chaophrayacruise.com/',
+      bookingUrl: 'https://www.chaophrayacruise.com/',
     },
     'bangkok-hidden-speakeasy-bar-hopping': {
-      // timeout.com returns 400, worlds50bestbars.com 404
-      // Vesper is a real, acclaimed Bangkok cocktail bar, verified working
-      sourceUrl: 'https://www.vesperbar.co/',
-      websiteUrl: 'https://www.vesperbar.co/',
+      // TUK ME: actual bookable speakeasy bar hopping tour by electric tuk tuk
+      sourceUrl: 'https://www.tukme.co/products/speakeasy-bar-hopping',
+      websiteUrl: 'https://www.tukme.co/products/speakeasy-bar-hopping',
+      bookingUrl: 'https://www.tukme.co/products/speakeasy-bar-hopping',
     },
     'bangkok-lumpini-park-tai-chi-morning': {
-      // bangkok.com redirects to hotels.com (broken)
-      sourceUrl: 'https://en.wikipedia.org/wiki/Lumphini_Park',
-      websiteUrl: 'https://en.wikipedia.org/wiki/Lumphini_Park',
+      // Viator: bookable Tai Chi in Lumpini Park experience
+      sourceUrl: 'https://www.viator.com/tours/Bangkok/Tai-Chi-in-Lumpini-Park/d343-9566P117',
+      websiteUrl: 'https://www.viator.com/tours/Bangkok/Tai-Chi-in-Lumpini-Park/d343-9566P117',
+      bookingUrl: 'https://www.viator.com/tours/Bangkok/Tai-Chi-in-Lumpini-Park/d343-9566P117',
     },
   };
 
   for (const [slug, fix] of Object.entries(fixes)) {
     await db.update(experiences)
-      .set({ sourceUrl: fix.sourceUrl, websiteUrl: fix.websiteUrl, updatedAt: now })
+      .set({
+        sourceUrl: fix.sourceUrl,
+        websiteUrl: fix.websiteUrl,
+        bookingUrl: fix.bookingUrl,
+        updatedAt: now,
+      })
       .where(eq(experiences.slug, slug))
       .run();
-    console.log(`Fixed: ${slug} -> ${fix.sourceUrl}`);
+    console.log(`Fixed: ${slug}`);
+    console.log(`  Website: ${fix.websiteUrl}`);
+    console.log(`  Booking: ${fix.bookingUrl}`);
   }
 
-  console.log('\nDone! All source URLs updated with verified working links.');
+  console.log('\nDone! All URLs updated with verified booking links.');
 }
 
 main().catch(console.error);

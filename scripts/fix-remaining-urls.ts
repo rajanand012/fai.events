@@ -26,20 +26,29 @@ async function main() {
 
   const now = new Date().toISOString();
 
-  // Fix privateguidechiangmai.com 404
-  const fixes: Record<string, { sourceUrl: string; websiteUrl?: string }> = {
+  // Fix the Doi Suthep experience that had a broken privateguidechiangmai.com URL
+  const fixes: Record<string, { sourceUrl: string; websiteUrl: string; bookingUrl: string }> = {
     'sunrise-at-doi-suthep-temple-cultural-immersion': {
-      sourceUrl: 'https://en.wikipedia.org/wiki/Wat_Phra_That_Doi_Suthep',
-      websiteUrl: 'https://en.wikipedia.org/wiki/Wat_Phra_That_Doi_Suthep',
+      // Untouched Thailand: actual bookable sunrise tour operator (verified working)
+      sourceUrl: 'https://www.untouchedthailand.com/en/tour/detail/504/c-003-amazing-sunrise-tour-the-original',
+      websiteUrl: 'https://www.untouchedthailand.com/en/tour/detail/504/c-003-amazing-sunrise-tour-the-original',
+      bookingUrl: 'https://www.untouchedthailand.com/en/tour/detail/504/c-003-amazing-sunrise-tour-the-original',
     },
   };
 
   for (const [slug, fix] of Object.entries(fixes)) {
     const result = await db.update(experiences)
-      .set({ sourceUrl: fix.sourceUrl, websiteUrl: fix.websiteUrl, updatedAt: now })
+      .set({
+        sourceUrl: fix.sourceUrl,
+        websiteUrl: fix.websiteUrl,
+        bookingUrl: fix.bookingUrl,
+        updatedAt: now,
+      })
       .where(eq(experiences.slug, slug))
       .run();
-    console.log(`Fixed: ${slug} -> ${fix.sourceUrl} (rows affected: ${result.rowsAffected})`);
+    console.log(`Fixed: ${slug} (rows: ${result.rowsAffected})`);
+    console.log(`  Website: ${fix.websiteUrl}`);
+    console.log(`  Booking: ${fix.bookingUrl}`);
   }
 
   console.log('\nDone!');
