@@ -8,6 +8,8 @@ import { db } from "@/lib/db";
 import { experiences, categories } from "@/lib/db/schema";
 import { eq, desc, and, sql } from "drizzle-orm";
 
+export const dynamic = "force-dynamic";
+
 function mapExperience(row: typeof experiences.$inferSelect) {
   return {
     id: String(row.id),

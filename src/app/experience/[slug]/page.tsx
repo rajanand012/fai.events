@@ -11,6 +11,8 @@ import { db } from "@/lib/db";
 import { experiences } from "@/lib/db/schema";
 import { eq, desc, and, ne, or, sql } from "drizzle-orm";
 
+export const dynamic = "force-dynamic";
+
 interface PageProps {
   params: Promise<{ slug: string }>;
 }

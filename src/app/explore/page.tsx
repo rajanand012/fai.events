@@ -9,6 +9,8 @@ import { experiences, categories, provinces } from "@/lib/db/schema";
 import { eq, desc, asc, and, like, or, sql } from "drizzle-orm";
 import type { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Explore Experiences",
   description:
