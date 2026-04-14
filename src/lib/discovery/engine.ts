@@ -95,9 +95,22 @@ export async function runDiscoveryPipeline(
 
           // Check score threshold
           if (evaluation.scores.overall >= 70) {
+            // Validate required fields before inserting
+            if (!evaluation.title || !evaluation.destination || !evaluation.province ||
+                !evaluation.category || !evaluation.summaryShort || !evaluation.summaryLong) {
+              errors.push(`Skipping ${candidate.url}: missing required fields (title/destination/province/category/summary)`);
+              await recordUrl(candidate.url);
+              continue;
+            }
+
             const slug = await generateUniqueSlug(evaluation.title);
             const now = new Date().toISOString();
             const autoApprove = evaluation.scores.overall >= 70;
+
+            // Use a fallback image if none found from scraping
+            const imageUrl = scraped.ogImage ||
+              (scraped.images && scraped.images.length > 0 ? scraped.images[0] : null) ||
+              `https://images.unsplash.com/photo-1528181304800-259b08848526?w=800&auto=format&fit=crop`;
 
             await db.insert(experiences)
               .values({
@@ -109,7 +122,7 @@ export async function runDiscoveryPipeline(
                 summaryShort: evaluation.summaryShort,
                 summaryLong: evaluation.summaryLong,
                 whySpecial: evaluation.whySpecial,
-                imageUrl: scraped.ogImage || null,
+                imageUrl,
                 sourceUrl: candidate.url,
                 websiteUrl: evaluation.websiteUrl || null,
                 socialLink: evaluation.socialLink || null,

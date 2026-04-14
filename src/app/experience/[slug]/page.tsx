@@ -9,7 +9,7 @@ import ScoreBadge from "@/components/experience/ScoreBadge";
 import ExperienceCard from "@/components/experience/ExperienceCard";
 import { db } from "@/lib/db";
 import { experiences } from "@/lib/db/schema";
-import { eq, desc, and, ne, or, sql } from "drizzle-orm";
+import { eq, desc, and, ne, or, like, sql } from "drizzle-orm";
 
 export const dynamic = "force-dynamic";
 
@@ -18,12 +18,24 @@ interface PageProps {
 }
 
 async function getExperience(slug: string) {
+  // Exact match first
   const rows = await db
     .select()
     .from(experiences)
     .where(eq(experiences.slug, slug))
     .limit(1);
-  return rows[0] ?? null;
+  if (rows[0]) return rows[0];
+
+  // Fuzzy match: try finding by partial slug (handles old slugs after renames)
+  const fuzzyRows = await db
+    .select()
+    .from(experiences)
+    .where(and(
+      eq(experiences.status, "approved"),
+      like(experiences.slug, `%${slug.split('-').slice(0, 4).join('-')}%`)
+    ))
+    .limit(1);
+  return fuzzyRows[0] ?? null;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
