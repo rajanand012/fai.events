@@ -117,7 +117,7 @@ export default async function ExperienceDetailPage({ params }: PageProps) {
             <img
               src={experience.imageUrl}
               alt={experience.title}
-              className="absolute inset-0 h-full w-full object-cover"
+              className="absolute inset-0 h-full w-full object-cover object-top"
             />
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-brand-blue via-brand-blue/90 to-brand-charcoal" />

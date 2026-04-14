@@ -98,7 +98,13 @@ export default async function ExplorePage({ searchParams }: ExplorePageProps) {
       .where(eq(provinces.slug, provinceSlug))
       .limit(1);
     if (matchProv.length > 0) {
-      conditions.push(eq(experiences.province, matchProv[0].name));
+      // Workshops are available across all provinces, so always include them
+      conditions.push(
+        or(
+          eq(experiences.province, matchProv[0].name),
+          eq(experiences.category, "workshops")
+        )!
+      );
     }
   }
 
