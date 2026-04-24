@@ -1,12 +1,13 @@
 import * as cheerio from 'cheerio';
 import type { RawCandidate, ScrapedContent } from './types';
-import { getSearchUrl } from './sources';
 
 const USER_AGENT =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
   '(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
 
 const FETCH_TIMEOUT = 10_000;
+
+const BRAVE_SEARCH_ENDPOINT = 'https://api.search.brave.com/res/v1/web/search';
 
 /** Domains that won't have scrapeable unique experience content. */
 const BLOCKED_DOMAINS = new Set([
@@ -43,68 +44,79 @@ function isBlockedUrl(url: string): boolean {
   }
 }
 
+interface BraveWebResult {
+  title?: string;
+  url: string;
+  description?: string;
+}
+
+interface BraveSearchResponse {
+  web?: {
+    results?: BraveWebResult[];
+  };
+}
+
 /**
- * Search DuckDuckGo HTML for a query and return raw candidate URLs.
+ * Search the web via Brave Search API and return raw candidate URLs.
  * Returns up to 10 results per query.
+ *
+ * Requires the BRAVE_SEARCH_API_KEY environment variable. Brave's free tier
+ * allows 2,000 queries/month which is plenty for a daily cron.
  */
 export async function searchWeb(query: string): Promise<RawCandidate[]> {
-  const searchUrl = getSearchUrl(query);
+  const apiKey = process.env.BRAVE_SEARCH_API_KEY;
+
+  if (!apiKey) {
+    console.error(
+      '[scraper] BRAVE_SEARCH_API_KEY is not set. Cannot run web search.'
+    );
+    return [];
+  }
+
+  const searchUrl = `${BRAVE_SEARCH_ENDPOINT}?q=${encodeURIComponent(query)}&count=10&country=TH&safesearch=moderate`;
 
   try {
     const response = await fetch(searchUrl, {
-      headers: { 'User-Agent': USER_AGENT },
+      headers: {
+        Accept: 'application/json',
+        'Accept-Encoding': 'gzip',
+        'X-Subscription-Token': apiKey,
+      },
       signal: AbortSignal.timeout(FETCH_TIMEOUT),
     });
 
     if (!response.ok) {
       console.error(
-        `[scraper] Search failed for "${query}": HTTP ${response.status}`
+        `[scraper] Brave Search failed for "${query}": HTTP ${response.status}`
       );
       return [];
     }
 
-    const html = await response.text();
-    const $ = cheerio.load(html);
+    const data = (await response.json()) as BraveSearchResponse;
+    const results = data.web?.results ?? [];
     const candidates: RawCandidate[] = [];
 
-    // DuckDuckGo HTML results use .result__a for links
-    $('a.result__a').each((_i, el) => {
-      if (candidates.length >= 10) return false;
+    for (const result of results) {
+      if (candidates.length >= 10) break;
 
-      const rawHref = $(el).attr('href') || '';
-      const title = $(el).text().trim();
-
-      // DuckDuckGo wraps links through a redirect; extract the actual URL
-      let url = rawHref;
-      try {
-        const parsed = new URL(rawHref, 'https://duckduckgo.com');
-        const uddg = parsed.searchParams.get('uddg');
-        if (uddg) {
-          url = decodeURIComponent(uddg);
-        }
-      } catch {
-        // Use rawHref as-is if parsing fails
-      }
+      const url = result.url;
 
       // Validate URL
       try {
         new URL(url);
       } catch {
-        return; // skip invalid URLs
+        continue;
       }
 
-      if (isBlockedUrl(url)) return;
-
-      const snippet =
-        $(el).closest('.result').find('.result__snippet').text().trim() || '';
+      if (isBlockedUrl(url)) continue;
 
       candidates.push({
         url,
-        title: title || undefined,
-        snippet: snippet || undefined,
+        title: result.title || undefined,
+        snippet: result.description || undefined,
         source: query,
       });
-    });
+    }
 
     return candidates;
   } catch (error) {
