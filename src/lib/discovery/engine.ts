@@ -61,6 +61,9 @@ export async function runDiscoveryPipeline(
       try {
         candidates = await searchWeb(query);
         candidatesFound += candidates.length;
+        if (candidates.length === 0) {
+          errors.push(`Search returned 0 candidates for "${query}"`);
+        }
       } catch (error) {
         const msg = `Search failed for "${query}": ${error}`;
         console.error(`[engine] ${msg}`);

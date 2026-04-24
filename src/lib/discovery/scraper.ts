@@ -73,7 +73,9 @@ export async function searchWeb(query: string): Promise<RawCandidate[]> {
     return [];
   }
 
-  const searchUrl = `${BRAVE_SEARCH_ENDPOINT}?q=${encodeURIComponent(query)}&count=10&country=TH&safesearch=moderate`;
+  // Note: Brave Search does not support 'TH' as a country code. Using 'ALL'
+  // returns global results; the query itself already scopes to Thailand.
+  const searchUrl = `${BRAVE_SEARCH_ENDPOINT}?q=${encodeURIComponent(query)}&count=10&country=ALL&safesearch=moderate`;
 
   try {
     const response = await fetch(searchUrl, {
