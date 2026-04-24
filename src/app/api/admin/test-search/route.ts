@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
 
   const query = 'rooftop bar Bangkok skyline best cocktails';
   // Match production search params exactly
-  const url = `https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent(query)}&count=10&country=TH&safesearch=moderate`;
+  const url = `https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent(query)}&count=10&country=ALL&safesearch=moderate`;
 
   try {
     const response = await fetch(url, {

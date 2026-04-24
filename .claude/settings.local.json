@@ -33,7 +33,17 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)",
       "Bash(gh auth:*)",
       "Bash(node_modules/.bin/tsc --noEmit)",
-      "Bash(TURSO_DATABASE_URL=\"libsql://fai-events-rajga.aws-ap-south-1.turso.io\" TURSO_AUTH_TOKEN=\"eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3NzU3OTE2ODksImlkIjoiMDE5ZDc1NmQtZjMwMS03MjY4LTk4MDgtNzhjMDg0M2MyYmZhIiwicmlkIjoiMTE3ZDU5MTEtMDBlYi00MmIwLWFlODQtODA4OWYwYjU4NTA3In0.GysBWlZQjPimkuBTq3wvyNV8Yr8HyiCE_r6f2AYEb1bDoa3Uw3HClpJ2_1jT-L2MAe_RfSGTIhzX7Fzc8Vt-Ag\" npx drizzle-kit push)"
+      "Bash(TURSO_DATABASE_URL=\"libsql://fai-events-rajga.aws-ap-south-1.turso.io\" TURSO_AUTH_TOKEN=\"eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3NzU3OTE2ODksImlkIjoiMDE5ZDc1NmQtZjMwMS03MjY4LTk4MDgtNzhjMDg0M2MyYmZhIiwicmlkIjoiMTE3ZDU5MTEtMDBlYi00MmIwLWFlODQtODA4OWYwYjU4NTA3In0.GysBWlZQjPimkuBTq3wvyNV8Yr8HyiCE_r6f2AYEb1bDoa3Uw3HClpJ2_1jT-L2MAe_RfSGTIhzX7Fzc8Vt-Ag\" npx drizzle-kit push)",
+      "Bash(nslookup fai.events 8.8.8.8)",
+      "Bash(nslookup fai.events 1.1.1.1)",
+      "Bash(nslookup -type=NS fai.events 8.8.8.8)",
+      "Bash(nslookup fai.events ns1.google.com)",
+      "Bash(nslookup fai.events iris.ns.cloudflare.com)",
+      "WebFetch(domain:danremon.com)",
+      "Bash(xargs cat:*)",
+      "WebFetch(domain:fai-events.vercel.app)",
+      "WebFetch(domain:localhost)",
+      "Bash(curl -s http://localhost:3000)"
     ]
   }
 }
