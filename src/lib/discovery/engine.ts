@@ -8,11 +8,6 @@ import { evaluateExperience } from './evaluator';
 import { isDuplicate, recordUrl } from './deduplicator';
 import type { PipelineRunResult, RawCandidate } from './types';
 
-/** Small delay between candidate processing to be polite to servers. */
-function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 /**
  * Run the full discovery pipeline:
  * 1. Pick random search queries
@@ -49,12 +44,19 @@ export async function runDiscoveryPipeline(
   const latestRun = await db.select().from(pipelineRuns).orderBy(desc(pipelineRuns.id)).limit(1).get();
   const runId = latestRun!.id;
 
+  // Vercel Hobby caps serverless functions at 60s. Leave a 5s safety margin
+  // so we can still write the final pipeline_runs update before the kill.
+  const TIME_BUDGET_MS = 55_000;
+  const timedOut = () => Date.now() - startTime > TIME_BUDGET_MS;
+
   try {
-    // 2. Get rotated queries (8 random queries per run)
-    const queries = getRotatedQueries(8);
+    // 2. Get rotated queries (3 per run: at ~5-8s per candidate, 3 queries
+    //    of up to 5 candidates each fits comfortably in the 60s budget).
+    const queries = getRotatedQueries(3);
 
     // 3. Process each query
     for (const query of queries) {
+      if (timedOut()) { errors.push('Time budget exhausted, stopping early'); break; }
       sourcesSearched++;
       let candidates: RawCandidate[] = [];
 
@@ -71,8 +73,9 @@ export async function runDiscoveryPipeline(
         continue;
       }
 
-      // 4. Process each candidate
-      for (const candidate of candidates) {
+      // 4. Process each candidate (cap to 5 per query to stay in budget)
+      for (const candidate of candidates.slice(0, 5)) {
+        if (timedOut()) { errors.push('Time budget exhausted, stopping early'); break; }
         try {
           // Check for duplicates
           if (await isDuplicate(candidate.url, candidate.title)) {
@@ -163,9 +166,8 @@ export async function runDiscoveryPipeline(
           errors.push(msg);
         }
 
-        // Be polite: small delay between candidates
-        await delay(500);
       }
+      if (timedOut()) break;
     }
   } catch (error) {
     const msg = `Pipeline error: ${error}`;

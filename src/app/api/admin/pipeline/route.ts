@@ -5,6 +5,9 @@ import { desc } from 'drizzle-orm';
 import { isAdmin } from '@/lib/auth/admin';
 import { runDiscoveryPipeline } from '@/lib/discovery/engine';
 
+// Vercel Hobby ceiling; the engine self-limits to 55s internally.
+export const maxDuration = 60;
+
 export async function POST(request: NextRequest) {
   if (!isAdmin(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

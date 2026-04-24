@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { runDiscoveryPipeline } from '@/lib/discovery/engine';
 
+// Vercel Hobby ceiling; the engine self-limits to 55s internally.
+export const maxDuration = 60;
+
 async function handleCron(request: NextRequest) {
   // Vercel crons send CRON_SECRET via Authorization header
   const authHeader = request.headers.get('authorization');
