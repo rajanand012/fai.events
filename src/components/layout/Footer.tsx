@@ -13,10 +13,10 @@ export default function Footer() {
               events
             </h3>
             <p className="text-sm text-white/70 leading-relaxed">
-              Extraordinary, AI-curated experiences across Thailand. Discover hidden gems and unforgettable adventures tailored just for you.
+              Extraordinary experiences across Thailand, curated daily. Discover hidden gems and unforgettable adventures tailored just for you.
             </p>
             <p className="text-xs text-white/50 mt-3">
-              Built with Claude AI and Claude Code
+              Built with Claude Code
             </p>
           </div>
 
@@ -112,7 +112,7 @@ export default function Footer() {
             >
               Raj Goodman
             </a>
-            {" "}project, powered by Claude AI
+            {" "}project, built with Claude Code
           </p>
         </div>
       </div>

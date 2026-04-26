@@ -113,10 +113,10 @@ export default async function HomePage() {
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight tracking-tight">
                 Thailand&apos;s Most Extraordinary{" "}
                 <span className="text-brand-yellow">Experiences</span>,{" "}
-                Curated by AI
+                Curated Daily
               </h1>
               <p className="mt-6 text-lg sm:text-xl text-white/80 leading-relaxed max-w-2xl">
-                Every day, our AI discovers and evaluates hidden gems, luxury escapes,
+                Every day, our discovery engine surfaces hidden gems, luxury escapes,
                 and once-in-a-lifetime adventures across Thailand. Only the best make the cut.
               </p>
               <div className="mt-10 flex flex-wrap gap-4">
@@ -177,7 +177,7 @@ export default async function HomePage() {
                 Featured Experiences
               </h2>
               <p className="mt-3 text-lg text-brand-charcoal/60">
-                Hand-picked by our AI for their extraordinary quality
+                Hand-picked for their extraordinary quality
               </p>
             </div>
             <ExperienceGrid experiences={featured} />
@@ -203,11 +203,11 @@ export default async function HomePage() {
                 How It Works
               </h2>
               <p className="mt-3 text-lg text-brand-charcoal/60">
-                Powered by artificial intelligence, curated for you
+                An always-on discovery engine, curated daily
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-              {/* Card 1: AI Discovers */}
+              {/* Card 1: We Discover */}
               <div className="relative bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow text-center">
                 <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-light-blue">
                   <svg className="h-8 w-8 text-brand-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -215,14 +215,14 @@ export default async function HomePage() {
                   </svg>
                 </div>
                 <div className="absolute top-4 right-4 text-5xl font-extrabold text-brand-light-blue">1</div>
-                <h3 className="text-xl font-bold text-brand-charcoal mb-3">AI Discovers</h3>
+                <h3 className="text-xl font-bold text-brand-charcoal mb-3">We Discover</h3>
                 <p className="text-brand-charcoal/70 leading-relaxed">
-                  Our AI scans hundreds of sources daily to find extraordinary experiences
+                  Our discovery engine scans hundreds of sources daily to find extraordinary experiences
                   across Thailand&apos;s most compelling destinations.
                 </p>
               </div>
 
-              {/* Card 2: AI Evaluates */}
+              {/* Card 2: We Evaluate */}
               <div className="relative bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow text-center">
                 <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-yellow/15">
                   <svg className="h-8 w-8 text-brand-yellow" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -230,7 +230,7 @@ export default async function HomePage() {
                   </svg>
                 </div>
                 <div className="absolute top-4 right-4 text-5xl font-extrabold text-brand-yellow/20">2</div>
-                <h3 className="text-xl font-bold text-brand-charcoal mb-3">AI Evaluates</h3>
+                <h3 className="text-xl font-bold text-brand-charcoal mb-3">We Evaluate</h3>
                 <p className="text-brand-charcoal/70 leading-relaxed">
                   Each discovery is rigorously scored on uniqueness, luxury, and authenticity.
                   Only the finest experiences make the cut.
@@ -399,25 +399,25 @@ export default async function HomePage() {
                   </a>
                 </div>
 
-                {/* Powered by Claude AI */}
+                {/* Built with Claude Code */}
                 <div>
                   <div className="inline-flex items-center gap-2 rounded-full bg-brand-light-blue px-4 py-2 mb-6">
                     <svg className="h-4 w-4 text-brand-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
                     </svg>
-                    <span className="text-sm font-medium text-brand-blue">Powered by AI</span>
+                    <span className="text-sm font-medium text-brand-blue">How it&apos;s built</span>
                   </div>
                   <h2 className="text-2xl sm:text-3xl font-bold text-brand-charcoal mb-4">
-                    Powered by Claude AI
+                    Built with Claude Code
                   </h2>
                   <p className="text-brand-charcoal/70 leading-relaxed mb-4">
-                    This platform was built entirely with Claude AI and Claude Code by Anthropic.
+                    This platform was built entirely with Claude Code by Anthropic.
                     From the discovery engine that finds new experiences, to the evaluation system
                     that scores quality, to the code itself.
                   </p>
                   <p className="text-brand-charcoal/50 text-sm leading-relaxed">
-                    Every experience on fai.events was discovered, evaluated, and curated by
-                    artificial intelligence. The entire codebase was written with Claude Code.
+                    Every experience on fai.events was surfaced and scored by our discovery engine,
+                    which runs continuously and updates daily. The entire codebase was written with Claude Code.
                   </p>
                 </div>
               </div>
