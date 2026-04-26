@@ -369,58 +369,31 @@ export default async function HomePage() {
         {/* ==================== ABOUT / BUILT BY RAJ ==================== */}
         <section id="about" className="py-20 bg-white">
           <Container>
-            <div className="max-w-4xl mx-auto">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
-                {/* Built by Raj */}
-                <div>
-                  <div className="inline-flex items-center gap-2 rounded-full bg-brand-yellow/10 px-4 py-2 mb-6">
-                    <span className="h-2 w-2 rounded-full bg-brand-yellow" />
-                    <span className="text-sm font-medium text-brand-charcoal">About the Creator</span>
-                  </div>
-                  <h2 className="text-2xl sm:text-3xl font-bold text-brand-charcoal mb-4">
-                    Built by Raj Goodman
-                  </h2>
-                  <p className="text-brand-charcoal/70 leading-relaxed mb-4">
-                    AI innovator, workshop facilitator, and keynote speaker for EO and YPO chapters
-                    worldwide. Raj is a fractional Chief AI Officer who helps businesses unlock the
-                    potential of AI. Based in the region, he built fai.events to showcase what AI can
-                    do when pointed at something extraordinary.
-                  </p>
-                  <a
-                    href="https://rajgoodman.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-brand-blue font-semibold hover:underline underline-offset-4"
-                  >
-                    rajgoodman.com
-                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                    </svg>
-                  </a>
-                </div>
-
-                {/* Built with Claude Code */}
-                <div>
-                  <div className="inline-flex items-center gap-2 rounded-full bg-brand-light-blue px-4 py-2 mb-6">
-                    <svg className="h-4 w-4 text-brand-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
-                    </svg>
-                    <span className="text-sm font-medium text-brand-blue">How it&apos;s built</span>
-                  </div>
-                  <h2 className="text-2xl sm:text-3xl font-bold text-brand-charcoal mb-4">
-                    Built with Claude Code
-                  </h2>
-                  <p className="text-brand-charcoal/70 leading-relaxed mb-4">
-                    This platform was built entirely with Claude Code by Anthropic.
-                    From the discovery engine that finds new experiences, to the evaluation system
-                    that scores quality, to the code itself.
-                  </p>
-                  <p className="text-brand-charcoal/50 text-sm leading-relaxed">
-                    Every experience on fai.events was surfaced and scored by our discovery engine,
-                    which runs continuously and updates daily. The entire codebase was written with Claude Code.
-                  </p>
-                </div>
+            <div className="max-w-2xl mx-auto text-center">
+              <div className="inline-flex items-center gap-2 rounded-full bg-brand-yellow/10 px-4 py-2 mb-6">
+                <span className="h-2 w-2 rounded-full bg-brand-yellow" />
+                <span className="text-sm font-medium text-brand-charcoal">About the Creator</span>
               </div>
+              <h2 className="text-2xl sm:text-3xl font-bold text-brand-charcoal mb-4">
+                Built by Raj Goodman
+              </h2>
+              <p className="text-brand-charcoal/70 leading-relaxed mb-6">
+                AI innovator, workshop facilitator, and keynote speaker for EO and YPO chapters
+                worldwide. Raj is a fractional Chief AI Officer who helps businesses unlock the
+                potential of AI. Based in the region, he built fai.events to showcase what AI can
+                do when pointed at something extraordinary.
+              </p>
+              <a
+                href="https://rajgoodman.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-brand-blue font-semibold hover:underline underline-offset-4"
+              >
+                rajgoodman.com
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                </svg>
+              </a>
             </div>
           </Container>
         </section>
