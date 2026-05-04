@@ -27,33 +27,17 @@ function mapExperience(row: typeof experiences.$inferSelect) {
 }
 
 export default async function HomePage() {
-  // Featured experiences: top 6 featured first, then fill with highest-scored approved
+  // Featured experiences: 6 random high-scoring approved experiences.
+  // Page is force-dynamic so every request reshuffles. We restrict to
+  // aiScore >= 75 so the homepage still surfaces only quality content.
   const featuredRows = await db
     .select()
     .from(experiences)
-    .where(and(eq(experiences.status, "approved"), eq(experiences.isFeatured, 1)))
-    .orderBy(desc(experiences.aiScore))
+    .where(and(eq(experiences.status, "approved"), sql`${experiences.aiScore} >= 75`))
+    .orderBy(sql`RANDOM()`)
     .limit(6);
 
-  let featured = featuredRows.map(mapExperience);
-
-  if (featured.length < 6) {
-    const existingIds = featuredRows.map((r) => r.id);
-    const fillRows = await db
-      .select()
-      .from(experiences)
-      .where(
-        and(
-          eq(experiences.status, "approved"),
-          existingIds.length > 0
-            ? sql`${experiences.id} NOT IN (${sql.join(existingIds.map((id) => sql`${id}`), sql`, `)})`
-            : sql`1=1`
-        )
-      )
-      .orderBy(desc(experiences.aiScore))
-      .limit(6 - featured.length);
-    featured = [...featured, ...fillRows.map(mapExperience)];
-  }
+  const featured = featuredRows.map(mapExperience);
 
   // Categories
   const allCategories = await db
