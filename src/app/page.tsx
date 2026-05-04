@@ -7,6 +7,7 @@ import ExperienceCard from "@/components/experience/ExperienceCard";
 import { db } from "@/lib/db";
 import { experiences, categories } from "@/lib/db/schema";
 import { eq, desc, and, sql } from "drizzle-orm";
+import { parseTags } from "@/lib/utils/tags";
 
 export const dynamic = "force-dynamic";
 
@@ -21,7 +22,7 @@ function mapExperience(row: typeof experiences.$inferSelect) {
     summaryShort: row.summaryShort,
     imageUrl: row.imageUrl ?? undefined,
     aiScore: row.aiScore,
-    tags: row.tags ? row.tags.split(",").map((t) => t.trim()) : [],
+    tags: parseTags(row.tags),
     isFeatured: row.isFeatured === 1,
   };
 }

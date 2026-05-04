@@ -10,6 +10,7 @@ import ExperienceCard from "@/components/experience/ExperienceCard";
 import { db } from "@/lib/db";
 import { experiences } from "@/lib/db/schema";
 import { eq, desc, and, ne, or, like, sql } from "drizzle-orm";
+import { parseTags } from "@/lib/utils/tags";
 
 export const dynamic = "force-dynamic";
 
@@ -84,9 +85,7 @@ export default async function ExperienceDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const tags = experience.tags
-    ? experience.tags.split(",").map((t) => t.trim())
-    : [];
+  const tags = parseTags(experience.tags);
 
   // Related experiences: same category or province, excluding current
   const related = await db
@@ -115,7 +114,7 @@ export default async function ExperienceDetailPage({ params }: PageProps) {
     summaryShort: row.summaryShort,
     imageUrl: row.imageUrl ?? undefined,
     aiScore: row.aiScore,
-    tags: row.tags ? row.tags.split(",").map((t) => t.trim()) : [],
+    tags: parseTags(row.tags),
     isFeatured: row.isFeatured === 1,
   }));
 
