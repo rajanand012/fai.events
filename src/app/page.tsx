@@ -296,10 +296,10 @@ export default async function HomePage() {
           <Container>
             <div className="max-w-3xl mx-auto text-center mb-14">
               <h2 className="text-3xl sm:text-4xl font-bold text-white">
-                Workshops
+                From Founders
               </h2>
               <p className="mt-3 text-lg text-white/70">
-                World-class workshops and intensives available across Thailand
+                Mostly from EO Bangkok Metropolitan members: all available in Thailand.
               </p>
             </div>
 
@@ -345,7 +345,7 @@ export default async function HomePage() {
                 href="/explore?category=workshops"
                 className="inline-flex items-center justify-center rounded-lg bg-brand-yellow px-7 py-3.5 text-base font-semibold text-brand-charcoal transition-all duration-200 hover:brightness-110 hover:scale-[1.02]"
               >
-                View All Workshops
+                View All
               </Link>
             </div>
           </Container>
