@@ -2,6 +2,27 @@ import Link from "next/link";
 import Badge from "@/components/ui/Badge";
 import ScoreBadge from "@/components/experience/ScoreBadge";
 
+// Map raw category slugs (stored in the DB) to the human-facing label
+// used on cards. Slugs stay legacy ('workshops') for URL stability while
+// the card shows the new branding.
+const CATEGORY_LABEL: Record<string, string> = {
+  workshops: "From Founders",
+  "fine-dining": "Fine Dining",
+  "luxury-stay": "Luxury Stay",
+  "water-sports": "Water Sports",
+  "animal-encounter": "Animal Encounter",
+  "animal-interaction": "Animal Interaction",
+};
+
+function categoryLabel(slug: string): string {
+  if (CATEGORY_LABEL[slug]) return CATEGORY_LABEL[slug];
+  // Fall back to a friendlier render of the slug than the raw value.
+  return slug
+    .split("-")
+    .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+    .join(" ");
+}
+
 export interface Experience {
   id: string;
   slug: string;
@@ -53,9 +74,24 @@ export default function ExperienceCard({ experience }: ExperienceCardProps) {
 
         {/* Category badge, top-left */}
         <div className="absolute top-3 left-3">
-          <Badge variant="default" className="text-xs backdrop-blur-sm bg-white/90 text-brand-blue">
-            {category}
-          </Badge>
+          {category === "workshops" ? (
+            // Special highlight styling for the From Founders category so
+            // it visually flags the entry on the cards grid (matches the
+            // yellow pill treatment on /explore).
+            <Badge
+              variant="default"
+              className="text-xs font-semibold backdrop-blur-sm bg-brand-yellow text-brand-charcoal shadow-sm"
+            >
+              ★ {categoryLabel(category)}
+            </Badge>
+          ) : (
+            <Badge
+              variant="default"
+              className="text-xs backdrop-blur-sm bg-white/90 text-brand-blue"
+            >
+              {categoryLabel(category)}
+            </Badge>
+          )}
         </div>
 
         {/* Score badge, top-right */}
