@@ -117,23 +117,40 @@ export default function ExperienceFilters({
         >
           All Categories
         </button>
-        {categories.map((cat) => (
-          <button
-            key={cat.id}
-            onClick={() =>
-              updateParams({
-                category: currentCategory === cat.slug ? "" : cat.slug,
-              })
-            }
-            className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-              currentCategory === cat.slug
-                ? "bg-brand-blue text-white"
-                : "bg-gray-100 text-brand-charcoal/70 hover:bg-gray-200"
-            }`}
-          >
-            {cat.name}
-          </button>
-        ))}
+        {categories.map((cat) => {
+          const isActive = currentCategory === cat.slug;
+          // The 'workshops' slug is rebranded as the 'From Founders'
+          // highlight section. We give it always-visible yellow styling so
+          // it stands out from the regular grey pills, regardless of
+          // whether it is currently selected.
+          const isHighlight = cat.slug === "workshops";
+          let pillClass: string;
+          if (isHighlight) {
+            pillClass = isActive
+              ? "bg-brand-yellow text-brand-charcoal ring-2 ring-brand-yellow ring-offset-2 ring-offset-white shadow-sm"
+              : "bg-brand-yellow/15 text-brand-charcoal ring-1 ring-brand-yellow/60 hover:bg-brand-yellow/25";
+          } else {
+            pillClass = isActive
+              ? "bg-brand-blue text-white"
+              : "bg-gray-100 text-brand-charcoal/70 hover:bg-gray-200";
+          }
+          return (
+            <button
+              key={cat.id}
+              onClick={() =>
+                updateParams({
+                  category: isActive ? "" : cat.slug,
+                })
+              }
+              className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${pillClass} ${isHighlight ? "font-semibold" : ""}`}
+            >
+              {isHighlight && (
+                <span aria-hidden="true" className="mr-1">★</span>
+              )}
+              {cat.name}
+            </button>
+          );
+        })}
       </div>
 
       {/* Province + Sort row */}

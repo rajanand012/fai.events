@@ -156,11 +156,26 @@ export default async function ExplorePage({ searchParams }: ExplorePageProps) {
         <section className="bg-gradient-to-br from-brand-charcoal to-brand-blue py-16">
           <Container>
             <h1 className="text-3xl sm:text-4xl font-bold text-white">
-              Explore Experiences
+              {categorySlug === "workshops" ? "From Founders" : "Explore Experiences"}
             </h1>
-            <p className="mt-3 text-lg text-white/70">
-              {totalCount} extraordinary {totalCount === 1 ? "experience" : "experiences"} across Thailand
-            </p>
+            {categorySlug === "workshops" ? (
+              <p className="mt-3 text-lg text-white/70">
+                Mostly from{" "}
+                <a
+                  href="https://eobangkokmetropolitan.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline decoration-white/30 underline-offset-4 hover:text-brand-yellow hover:decoration-brand-yellow transition-colors"
+                >
+                  EO Bangkok Metropolitan
+                </a>{" "}
+                members: all available in Thailand.
+              </p>
+            ) : (
+              <p className="mt-3 text-lg text-white/70">
+                {totalCount} extraordinary {totalCount === 1 ? "experience" : "experiences"} across Thailand
+              </p>
+            )}
           </Container>
         </section>
 
