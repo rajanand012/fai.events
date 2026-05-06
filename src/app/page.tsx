@@ -299,7 +299,16 @@ export default async function HomePage() {
                 From Founders
               </h2>
               <p className="mt-3 text-lg text-white/70">
-                Mostly from EO Bangkok Metropolitan members: all available in Thailand.
+                Mostly from{" "}
+                <a
+                  href="https://eobangkokmetropolitan.org/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline decoration-white/30 underline-offset-4 hover:text-brand-yellow hover:decoration-brand-yellow transition-colors"
+                >
+                  EO Bangkok Metropolitan
+                </a>{" "}
+                members: all available in Thailand.
               </p>
             </div>
 
