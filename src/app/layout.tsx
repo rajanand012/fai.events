@@ -1,11 +1,19 @@
 import type { Metadata } from "next";
-import { Mulish } from "next/font/google";
+import { Mulish, Caveat } from "next/font/google";
 import "./globals.css";
 
 const mulish = Mulish({
   variable: "--font-mulish",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800"],
+});
+
+// Handwritten cursive font used only for the small "beta" mark next to the
+// fai.events logo. Loaded once from Google Fonts via next/font.
+const caveat = Caveat({
+  variable: "--font-caveat",
+  subsets: ["latin"],
+  weight: ["500", "700"],
 });
 
 export const metadata: Metadata = {
@@ -31,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${mulish.variable} h-full antialiased`}>
+    <html lang="en" className={`${mulish.variable} ${caveat.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-sans">{children}</body>
     </html>
   );

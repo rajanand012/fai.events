@@ -17,10 +17,22 @@ export default function Header() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-baseline gap-0.5 text-xl font-bold text-brand-charcoal">
+          <Link
+            href="/"
+            className="flex items-baseline gap-0.5 text-xl font-bold text-brand-charcoal"
+            aria-label="fai.events (beta)"
+          >
             fai
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-brand-yellow translate-y-0.5" />
             events
+            {/* Cursive 'beta' mark — Caveat font loaded in app/layout.tsx */}
+            <span
+              className="ml-1.5 text-base font-medium text-brand-yellow/90 -translate-y-1 rotate-[-6deg] inline-block"
+              style={{ fontFamily: "var(--font-caveat), cursive" }}
+              aria-hidden="true"
+            >
+              beta
+            </span>
           </Link>
 
           {/* Desktop nav */}
